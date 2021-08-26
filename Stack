@@ -1,0 +1,321 @@
+A stack is nothing but a linear data structure that follows the LIFO rule (Last In First Out). In a stack, both insertion and deletion take place from just one end, that is,
+from the top.
+
+Implementation:
+We can implement a stack in C++ in 2 ways:
+Statically: Array implementation of stacks allows the static memory allocation of its data elements. It is important to note that in this method, the stack acquires all the feature
+s of an array.
+Dynamically: Linked list implementation of stacks follow the dynamic memory allocation of its data elements. 
+
+*********************************************************************************************
+Array Implementation of Stack:
+
+#include <iostream>
+#include <stdlib.h> 
+#define LIMIT 100 // Specifying the maximum limit of the stack
+using namespace std;
+ 
+/* Global declaration of variables */
+
+int stack[LIMIT]; // Array implementation of stack
+int top; // To insert and delete the data elements in the stack
+int i; // To traverse the loop to while displaying the stack
+int choice; // To choose either of the 3 stack operations
+
+void push(); // Function used to insert the element into the stack
+void pop(); // Function used to delete the element from the stack
+void display(); // Function used to display all the elements in the stack according to LIFO rule
+ 
+int main()
+{
+cout<< "ARRAY IMPLEMENTATION USING STACKS"<<endl<<endl;
+top = -1; // Initializing top to -1 indicates that it is empty
+do
+{
+
+cout<<"1. Insert\n2. Delete\n3. Display\n4. Exit\n\n";
+cout<<"Enter your choice:";
+cin>>choice;
+ 
+switch(choice)
+{
+case 1:
+push();
+break;
+case 2:
+pop();
+break;
+case 3:
+display();
+break;
+case 4:
+exit(0);
+break;
+default:
+printf("Sorry, invalid choice!\n");
+break;
+}
+} while(choice!=4);
+return 0; 
+}
+
+void push()
+{
+int element;
+if(top == LIMIT- 1)
+{
+cout<<"Stack underflow\n";
+}
+else
+{
+cout<<"Enter the element to be inserted:";
+cin>>element;
+top++;
+stack[top]=element;
+}
+}
+
+void pop()
+{
+int element;
+if(top == -1)
+{
+cout<<"Stack underflow\n";
+}
+else
+{
+element=stack[top];
+cout<<"The deleted item is "<< stack[top] <<endl;
+top--; // The element below the topmost element is deleted
+}
+}
+
+void display()
+{
+if(top == -1)
+{
+cout<<"Stack underflow\n"; // Stack is empty
+}
+else if(top > 0)
+{
+cout<<"The elements of the stack are:\n";
+for(i = top; i >= 0; i--) // top to bottom traversal
+{
+cout<< stack[i] <<endl;
+}
+}
+}
+
+****************************************************************************************************
+
+
+Linked List Implementation of Stack:
+
+#include<iostream>
+using namespace std;
+
+struct node
+{
+int data;
+node *next;
+};
+
+class Stack
+{
+node *top;
+public :
+Stack()
+{
+top = NULL;
+}
+void push(); // Function used to insert the element into the stack
+void pop(); // Function used to delete an element from the stack
+void display(); // Function used to display all the elements in the stack according to LIFO rule
+};
+
+void Stack::push()
+{
+node *temp;
+temp = new node;
+cout<<"Enter the element to be inserted: ";
+cin>>temp -> data;
+temp -> next = top;
+top = temp;
+}
+
+void Stack::pop()
+{
+if(top != NULL)
+{
+node *temp = top;
+top = top -> next;
+cout<< "The deleted element is: " << temp -> data <<endl;
+delete temp;
+}
+else
+cout<<"Stack underflow!";
+}
+
+void Stack::display()
+{
+node *temp = top;
+while(temp != NULL)
+{
+cout<< temp -> data <<endl;
+temp = temp -> next;
+}
+}
+
+int main()
+{
+Stack s;
+int choice;
+cout<<"IMPLEMENTATION OF STACKS USING LINKED LISTS"<<endl<<endl;
+do
+{
+
+cout<<"1. Insert\n2. Delete\n3. Display\n4. Exit\n\n";
+cout<<"Enter your choice: ";
+cin>>choice;
+
+switch(choice)
+{
+case 1:
+s.push();
+break;
+case 2:
+s.pop();
+break;
+case 3:
+s.display();
+break;
+case 4:
+exit(0);
+break;
+default:
+printf("Sorry, invalid choice!\n");
+break;
+}
+} while(choice!=4);
+return 0;
+}
+
+**********************************************************************************************************************
+Application of Stack:
+**Number reversal: A stack helps you reverse a number or a word entered as a sequence of digits or characters respectively.
+**Undo operation: Implementation of a stack helps you perform the “undo” operation in text editors or word processors. Here, all the changes take place are stored in a stack.
+**Infix to postfix conversion: Using stacks, you can perform the conversion of an infix expression to a postfix expression.
+**Backtracking: Stacks finding applications in puzzle or maze problem-solving.
+**Depth-first search (DFS): Stacks allow you to perform a searching algorithm called the depth-first search.
+
+**********************************************************************************************************************
+
+
+*****Infix to Postfix conversion*****
+
+#include<bits/stdc++.h>
+using namespace std;
+
+//Function to return precedence of operators
+int prec(char c) {
+	if(c == '^')
+		return 3;
+	else if(c == '/' || c=='*')
+		return 2;
+	else if(c == '+' || c == '-')
+		return 1;
+	else
+		return -1;
+}
+
+void infixToPostfix(string s) {
+
+	stack<char> st;
+	string result;
+
+	for(int i = 0; i < s.length(); i++) {
+		char c = s[i];
+		if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
+			result += c;
+		else if(c == '(')
+			st.push('(');
+		else if(c == ')') {
+			while(st.top() != '(')
+			{
+				result += st.top();
+				st.pop();
+			}
+			st.pop();
+		}
+
+		else {
+			while(!st.empty() && prec(s[i]) <= prec(st.top())) {
+				result += st.top();
+				st.pop();
+			}
+			st.push(c);
+		}
+	}
+
+	while(!st.empty()) {
+		result += st.top();
+		st.pop();
+	}
+
+	cout << result << endl;
+}
+
+int main() {
+	string exp = "a+b*(c^d-e)^(f+g*h)-i";
+	infixToPostfix(exp);
+	return 0;
+}
+
+
+**************************************************************************************************************
+C++ Program To Balance Parenthesis Using Stack:
+
+/*
+  C++ Program to check for balanced parentheses in an expression using stack.
+  Given an expression as string comprising of opening and closing characters
+  of parentheses - (), curly braces - {} and square brackets - [], we need to 
+  check whether symbols are balanced or not. 
+*/
+#include<iostream>
+#include<stack>
+#include<string>
+using namespace std;
+// Function to check whether two characters are opening 
+// and closing of same type. 
+
+bool isBalanced(string s){
+    stack<char> i;
+
+    for (int c = 0; c < s.length(); c++) {
+        if(s[c] == '[' || s[c] == '{' || s[c] == '('){
+            i.push(s[c]);
+        } else if(s[c] == ']' || s[c] == '}' || s[c] == ')'){
+           if(s.empty() || !(i.top()+1==s[c]))
+                return false;
+            }else{
+                i.pop();
+            }
+     }
+
+    return true;
+}
+
+int main()
+{
+	/*Code to test the function AreParanthesesBalanced*/
+	string expression;
+	cout<<"Enter an expression:  "; // input expression from STDIN/Console
+	cin>>expression;
+	if(isBalanced(expression))
+		cout<<"Balanced\n";
+	else
+		cout<<"Not Balanced\n";
+}
+
+
+#happy_coding :)
