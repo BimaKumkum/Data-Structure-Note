@@ -6,7 +6,7 @@ void addEdge(vector<int>adj[],int u,int v)
     adj[u].push_back(v);
 }
 
-void DFS(vector<int>adj[],int s,int V)
+void BFS(vector<int>adj[],int s,int V)
 {
   vector<bool>visited(V,false);
   queue<int> st;
@@ -42,6 +42,6 @@ int main()
     addEdge(adj,2, 4);
     addEdge(adj,3, 1);
      addEdge(adj,4, 3);
-    DFS(adj,0,6);
+    BFS(adj,0,6);
 }
 
