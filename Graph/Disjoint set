@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MX 100
+
+int parent[MX];
+int rank_parent[MX];
+
+void makeSet(int n)
+{
+    for(int i=0;i<n;i++)
+    {
+        parent[i]=i;
+        rank_parent[i]=0;
+    }
+}
+int Find(int x)
+{
+    if(parent[x] != x)
+    {
+        return parent[x] = Find(parent[x]);
+    }
+    else
+        return x;
+}
+
+void unionSet(int x,int y)
+{
+    int px = Find(x);
+    int py = Find(y);
+    if(px == py) return;
+    if(rank_parent[px] > rank_parent[py])
+    {
+       parent[py]=px;
+    }
+     if(rank_parent[px] < rank_parent[py])
+    {
+       parent[px]=py;
+    }
+    else 
+    {
+        parent[py] = px;
+        rank_parent[x]++;
+    }
+
+}
+
+void print(int n)
+{
+    for(int i=0;i<n;i++)
+    {
+        cout<<"Node is "<<i<<"Parent is "<<parent[i]<<"Rank is"<<rank_parent[i]<<endl;
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    makeSet(n);
+    unionSet(0,1);
+    unionSet(4,2);
+    unionSet(3,1);
+    unionSet(0,3);
+
+    print(n);
+    return 0;
+}
