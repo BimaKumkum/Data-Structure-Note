@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void addEdge(vector<int>adj[],int u,int v)
+{
+    adj[u].push_back(v);
+}
+
+void DFS(vector<int>adj[],int s,int V)
+{
+  vector<bool>visited(V,false);
+  queue<int> st;
+  st.push(s);
+  while(!st.empty())
+  {
+      int s = st.front();
+      st.pop();
+      if(!visited[s])
+      {
+          cout<<s<<" ";
+          visited[s] = true;
+      }
+
+      for(int i = 0; i<adj[s].size();i++)
+      {
+          int v = adj[s][i];
+          if(!visited[v])
+          {
+              st.push(v);
+          }
+      }
+  }
+}
+
+int main()
+{
+    int V = 6;
+    vector<int>adj[V];
+    addEdge(adj,0, 1);
+    addEdge(adj,0, 2);
+    addEdge(adj,2, 1);
+    addEdge(adj,2, 4);
+    addEdge(adj,3, 1);
+     addEdge(adj,4, 3);
+    DFS(adj,0,6);
+}
+
