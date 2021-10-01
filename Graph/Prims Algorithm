@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MX 100
+
+int edge,vertex;
+typedef pair<int ,int>PII;
+vector<PII>v[MX];
+
+struct node
+{
+    int u;
+    int cost;
+};
+
+bool operator<(node a,node b)
+{
+    return a.cost>b.cost;
+}
+
+int cost[MX];
+priority_queue<node>pq;
+bool taken[MX];
+int prims(int source)
+{
+    for(int i=0;i<vertex;i++)
+    {
+        cost[i]= INT_MAX;
+        taken[i]=false;
+    }
+    cost[source] =0;
+    node temp;
+    temp.u = source;
+    temp.cost=0;
+    pq.push(temp);
+    int ans = 0;
+
+    while(!pq.empty())
+    {
+        node current = pq.top();
+        pq.pop();
+
+        if(taken[current.u])
+        {
+            continue;
+        }
+        taken[current.u]= true;
+        ans += current.cost;
+
+        for(int i=0;i<v[current.u].size(); i++)
+        {
+            if(taken[v[current.u][i].first])
+            {
+                continue;
+            }
+            if(v[current.u][i].second < cost[v[current.u][i].first])
+            {
+                node temp;
+           temp.u = v[current.u][i].first;
+           temp.cost = v[current.u][i].second;
+           pq.push(temp);
+           cost[v[current.u][i].first] = v[current.u][i].second;
+            }
+
+
+        }
+    }
+    return ans;
+}
+
+int main()
+{
+    int cost,source;
+    cin>>vertex>>edge;
+    PII p;
+    for(int i=0;i<edge;i++)
+    {
+      cin>>source>>p.first>>p.second;
+      v[source].push_back(p);
+      int source2 = p.first;
+      p.first = source;
+      v[source2].push_back(p);
+    }
+    int start;
+    cin>>start;
+    cout<<prims(start);
+    return 0;
+}
